@@ -53,6 +53,9 @@ import {
   SCREEN_ALLY_GRANT_REQUEST,
   SCREEN_ALLY_GRANT_SUCCESS,
   SCREEN_ALLY_GRANT_FAIL,
+  SCREEN_FEW_REQUEST,
+  SCREEN_FEW_SUCCESS,
+  SCREEN_FEW_FAIL,
 } from "../Constants/screenConstants";
 
 // List screens
@@ -101,19 +104,19 @@ export const fewScreens =
   }) =>
   async (dispatch) => {
     dispatch({
-      type: SCREEN_LIST_REQUEST,
+      type: SCREEN_FEW_REQUEST,
     });
     try {
       const { data } = await Axios.get(
         `${process.env.REACT_APP_BLINDS_SERVER}/api/screens/few/?pageNumber=${pageNumber}&master=${master}&name=${name}&category=${screenCategory}&min=${min}&max=${max}&rating=${rating}&request=${request}`
       );
       dispatch({
-        type: SCREEN_LIST_SUCCESS,
+        type: SCREEN_FEW_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: SCREEN_LIST_FAIL,
+        type: SCREEN_FEW_FAIL,
         payload: error.message,
       });
     }

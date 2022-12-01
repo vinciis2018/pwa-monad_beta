@@ -19,7 +19,11 @@ import {
   AiOutlineSliders,
   AiOutlineEdit,
 } from "react-icons/ai";
-import { listScreens, createScreen } from "../../Actions/screenActions";
+import {
+  listScreens,
+  createScreen,
+  fewScreens,
+} from "../../Actions/screenActions";
 import { userScreensList } from "../../Actions/userActions";
 
 import { Screen } from "components/common";
@@ -46,6 +50,13 @@ export function Screens(props: any) {
     error: errorScreenList,
     screens,
   } = screenList;
+
+  const screenFew = useSelector((state: any) => state.screenFew);
+  const {
+    loading: loadingScreenFew,
+    error: errorScreenFew,
+    screens: screensFew,
+  } = screenFew;
 
   const userScreens = useSelector((state: any) => state.userScreens);
   const {
@@ -78,6 +89,7 @@ export function Screens(props: any) {
     }
 
     dispatch(listScreens({}));
+    dispatch(fewScreens({}));
     dispatch(userScreensList(userInfo));
   }, [dispatch, userInfo, createdScreen, successCreate, navigate, redirect]);
 
@@ -97,19 +109,32 @@ export function Screens(props: any) {
 
   return (
     <Box px="2" pt="20" color="black.500">
-      {loadingUser || loadingCreate || loadingScreenList || loadingMyScreens ? (
+      {loadingUser ||
+      loadingCreate ||
+      // loadingScreenList ||
+      loadingScreenFew ||
+      loadingMyScreens ? (
         <HLoading
           loading={
             loadingUser ||
             loadingCreate ||
-            loadingScreenList ||
+            // loadingScreenList ||
+            loadingScreenFew ||
             loadingMyScreens
           }
         />
-      ) : errorUser || errorCreate || errorScreenList || errorMyScreens ? (
+      ) : errorUser ||
+        errorCreate ||
+        // errorScreenList ||
+        errorScreenFew ||
+        errorMyScreens ? (
         <MessageBox
           message={
-            errorUser || errorCreate || errorScreenList || errorMyScreens
+            errorUser ||
+            errorCreate ||
+            // errorScreenList ||
+            errorScreenFew ||
+            errorMyScreens
           }
         ></MessageBox>
       ) : (
@@ -189,10 +214,10 @@ export function Screens(props: any) {
           {allScreensVisible && (
             <Stack p="1">
               <SimpleGrid p="1" gap="4" columns={[2]}>
-                {screens.length === 0 && (
+                {screensFew.length === 0 && (
                   <MessageBox>No Screen Found</MessageBox>
                 )}
-                {screens.map((screen: any, index: any) => (
+                {screensFew.map((screen: any, index: any) => (
                   <MotionFlex
                     flexDir="column"
                     w="100%"

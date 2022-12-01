@@ -22,6 +22,9 @@ import {
   SCREEN_DETAILS_FAIL,
   SCREEN_DETAILS_REQUEST,
   SCREEN_DETAILS_SUCCESS,
+  SCREEN_FEW_FAIL,
+  SCREEN_FEW_REQUEST,
+  SCREEN_FEW_SUCCESS,
   SCREEN_FLAG_FAIL,
   SCREEN_FLAG_REQUEST,
   SCREEN_FLAG_SUCCESS,
@@ -88,16 +91,16 @@ export function screenFewReducer(
   action
 ) {
   switch (action.type) {
-    case SCREEN_LIST_REQUEST:
+    case SCREEN_FEW_REQUEST:
       return { loading: true };
-    case SCREEN_LIST_SUCCESS:
+    case SCREEN_FEW_SUCCESS:
       return {
         loading: false,
         screens: action.payload.screens,
         pages: action.payload.pages,
         page: action.payload.page,
       };
-    case SCREEN_LIST_FAIL:
+    case SCREEN_FEW_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
