@@ -19,12 +19,12 @@ import {
   AiOutlineSliders,
   AiOutlineEdit,
 } from "react-icons/ai";
-import { listAllVideos } from "../../Actions/advertActions";
 import { userVideosList } from "../../Actions/userActions";
 
 import { Advert } from "components/common";
 import MessageBox from "components/atoms/MessageBox";
 import HLoading from "components/atoms/HLoading";
+import { Leaderboard } from "components/widgets";
 
 export function Adverts(props: any) {
   const MotionFlex = motion(Flex);
@@ -34,13 +34,6 @@ export function Adverts(props: any) {
 
   const userSignin = useSelector((state: any) => state.userSignin);
   const { loading: loadingUser, error: errorUser, userInfo } = userSignin;
-
-  const videoListAll = useSelector((state: any) => state.videoListAll);
-  const {
-    loading: loadingVideoList,
-    error: errorVideoList,
-    allVideos,
-  } = videoListAll;
 
   const userVideos = useSelector((state: any) => state.userVideos);
   const {
@@ -60,7 +53,6 @@ export function Adverts(props: any) {
     } else {
       navigate(redirect);
     }
-    dispatch(listAllVideos());
   }, [dispatch, navigate, redirect, userInfo]);
 
   const openAllModal = () => {
@@ -75,14 +67,10 @@ export function Adverts(props: any) {
 
   return (
     <Box px="2" pt="20" color="black.500">
-      {loadingUser || loadingVideoList || loadingMyVideos ? (
-        <HLoading
-          loading={loadingUser || loadingVideoList || loadingMyVideos}
-        />
-      ) : errorUser || errorVideoList || errorMyVideos ? (
-        <MessageBox variant="danger">
-          {errorUser || errorVideoList || errorMyVideos}
-        </MessageBox>
+      {loadingUser || loadingMyVideos ? (
+        <HLoading loading={loadingUser || loadingMyVideos} />
+      ) : errorUser || errorMyVideos ? (
+        <MessageBox variant="danger">{errorUser || errorMyVideos}</MessageBox>
       ) : (
         <Box maxW="container.lg" mx="auto" pb="8">
           <Stack align="center" p="2" direction="row" justify="space-between">
@@ -154,32 +142,7 @@ export function Adverts(props: any) {
             )}
           </Flex>
           <hr />
-          {allVideosVisible && (
-            <Stack p="1">
-              <SimpleGrid p="1" gap="4" columns={[2]}>
-                {allVideos?.length === 0 && (
-                  <MessageBox>No Screen Found</MessageBox>
-                )}
-                {allVideos?.map((video: any, index: any) => (
-                  <MotionFlex
-                    flexDir="column"
-                    w="100%"
-                    role="group"
-                    rounded="md"
-                    shadow="card"
-                    whileHover={{
-                      translateY: -3,
-                    }}
-                    pos="relative"
-                    zIndex="1"
-                    key={index}
-                  >
-                    <Advert key={video._id} video={video} />
-                  </MotionFlex>
-                ))}
-              </SimpleGrid>
-            </Stack>
-          )}
+          {allVideosVisible && <Leaderboard props="advert" />}
           {myVideosVisible && (
             <Stack p="1">
               <SimpleGrid p="1" gap="4" columns={[2]}>

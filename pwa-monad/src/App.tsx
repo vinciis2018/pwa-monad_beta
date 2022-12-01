@@ -15,6 +15,8 @@ import {
   GalleryProvider,
 } from "components/contexts";
 import { ChakraProvider } from "@chakra-ui/react";
+import { QueryParamProvider } from "use-query-params";
+import { ReactRouter6Adapter } from "use-query-params/adapters/react-router-6";
 
 // TODO: to be deleted
 import BasicStyle from "theme/basicStyle";
@@ -39,7 +41,9 @@ function App() {
                   <BackupProvider>
                     <LoginProvider>
                       <UploadProvider>
-                        <PublicRoutes />
+                        <QueryParamProvider adapter={ReactRouter6Adapter}>
+                          <PublicRoutes />
+                        </QueryParamProvider>
                       </UploadProvider>
                     </LoginProvider>
                   </BackupProvider>

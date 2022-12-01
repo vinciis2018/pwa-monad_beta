@@ -1,11 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-
 import {
   Box,
   Image,
@@ -15,8 +13,7 @@ import {
   Flex,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { fewScreens, listScreens } from "../../Actions/screenActions";
-import { listAllVideos } from "../../Actions/advertActions";
+import { fewScreens } from "../../Actions/screenActions";
 import { triggerPort } from "services/utils";
 import {
   AiOutlineFundProjectionScreen,
@@ -29,22 +26,18 @@ import {
 // import { TopNftsContent } from "components/widgets";
 // import { TimeFilter } from "components/filters";
 
-import { Advert, Screen } from "components/common";
 import HLoading from "components/atoms/HLoading";
 import MessageBox from "components/atoms/MessageBox";
+import { Leaderboard } from "components/widgets";
 
 export function Home(props: any) {
   const navigate = useNavigate();
-  const MotionFlex = motion(Flex);
 
   const [screensModal, setScreensModal] = React.useState(false);
   const [nftsModal, setNftModal] = React.useState(false);
 
   const userSignin = useSelector((state: any) => state.userSignin);
   const { userInfo } = userSignin;
-
-  const screenList = useSelector((state: any) => state.screenList);
-  const { loading: loadingScreens, error: errorScreens, screens } = screenList;
 
   const screenFew = useSelector((state: any) => state.screenList);
   const {
@@ -53,25 +46,13 @@ export function Home(props: any) {
     screens: screensFew,
   } = screenFew;
 
-  const videoListAll = useSelector((state: any) => state.videoListAll);
-  const {
-    loading: loadingVideos,
-    error: errorVideos,
-    allVideos,
-  } = videoListAll;
-
   const dispatch = useDispatch<any>();
   React.useEffect(() => {
     if (userInfo && !userInfo.defaultWallet) {
       navigate("/welcome");
     }
 
-    dispatch(listScreens({}));
     dispatch(fewScreens({}));
-    dispatch(listAllVideos());
-
-    // dispatch(listTopMasters());
-    // dispatch(getAllPins());
   }, [dispatch, navigate, userInfo]);
 
   const modalHandler = () => {
@@ -94,12 +75,10 @@ export function Home(props: any) {
       {/* Container */}
       <Box maxW="container.lg" mx="auto" pb="8">
         <Stack p="1" color="">
-          {loadingScreensFew || loadingVideos ? (
-            <HLoading loading={loadingScreensFew || loadingVideos} />
-          ) : errorScreensFew || errorScreens || errorVideos ? (
-            <MessageBox variant="danger">
-              {errorScreens || errorVideos || errorScreensFew}
-            </MessageBox>
+          {loadingScreensFew ? (
+            <HLoading loading={loadingScreensFew} />
+          ) : errorScreensFew ? (
+            <MessageBox variant="danger">{errorScreensFew}</MessageBox>
           ) : (
             <Center width="100%">
               {screensFew?.length === 0 && (
@@ -243,26 +222,8 @@ export function Home(props: any) {
                 </Text>
               </Box>
             </Flex>
-            {screensModal && !loadingScreens && !errorScreens ? (
-              <SimpleGrid gap="4" columns={[1, 2]} px="1">
-                {screens?.map((screen: any) => (
-                  <MotionFlex
-                    key={screen._id}
-                    flexDir="column"
-                    w="100%"
-                    role="group"
-                    rounded="md"
-                    shadow="card"
-                    whileHover={{
-                      translateY: -3,
-                    }}
-                    pos="relative"
-                    zIndex="1"
-                  >
-                    <Screen screen={screen} />
-                  </MotionFlex>
-                ))}
-              </SimpleGrid>
+            {screensModal ? (
+              <Leaderboard props="screen" />
             ) : nftsModal ? (
               <Stack>
                 {/* <TimeFilter /> */}
@@ -271,27 +232,7 @@ export function Home(props: any) {
                 {/* <TopNftsContent /> */}
               </Stack>
             ) : (
-              <Stack>
-                <SimpleGrid gap="4" columns={[1, 2]} px="1">
-                  {allVideos?.map((video: any) => (
-                    <MotionFlex
-                      key={video._id}
-                      flexDir="column"
-                      w="100%"
-                      role="group"
-                      rounded="md"
-                      shadow="card"
-                      whileHover={{
-                        translateY: -3,
-                      }}
-                      pos="relative"
-                      zIndex="1"
-                    >
-                      <Advert key={video._id} video={video} />
-                    </MotionFlex>
-                  ))}
-                </SimpleGrid>
-              </Stack>
+              <Leaderboard props="advert" />
             )}
           </Stack>
         </Stack>

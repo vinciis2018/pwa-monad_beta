@@ -19,11 +19,7 @@ import {
   AiOutlineSliders,
   AiOutlineEdit,
 } from "react-icons/ai";
-import {
-  listScreens,
-  createScreen,
-  fewScreens,
-} from "../../Actions/screenActions";
+import { createScreen, fewScreens } from "../../Actions/screenActions";
 import { userScreensList } from "../../Actions/userActions";
 
 import { Screen } from "components/common";
@@ -31,6 +27,7 @@ import { Screen } from "components/common";
 import { SCREEN_CREATE_RESET } from "../../Constants/screenConstants";
 import MessageBox from "components/atoms/MessageBox";
 import HLoading from "components/atoms/HLoading";
+import { Leaderboard } from "components/widgets";
 
 export function Screens(props: any) {
   const MotionFlex = motion(Flex);
@@ -43,20 +40,6 @@ export function Screens(props: any) {
 
   const userSignin = useSelector((state: any) => state.userSignin);
   const { loading: loadingUser, error: errorUser, userInfo } = userSignin;
-
-  const screenList = useSelector((state: any) => state.screenList);
-  const {
-    loading: loadingScreenList,
-    error: errorScreenList,
-    screens,
-  } = screenList;
-
-  const screenFew = useSelector((state: any) => state.screenFew);
-  const {
-    loading: loadingScreenFew,
-    error: errorScreenFew,
-    screens: screensFew,
-  } = screenFew;
 
   const userScreens = useSelector((state: any) => state.userScreens);
   const {
@@ -88,7 +71,6 @@ export function Screens(props: any) {
       navigate(redirect);
     }
 
-    dispatch(listScreens({}));
     dispatch(fewScreens({}));
     dispatch(userScreensList(userInfo));
   }, [dispatch, userInfo, createdScreen, successCreate, navigate, redirect]);
@@ -112,28 +94,24 @@ export function Screens(props: any) {
       {loadingUser ||
       loadingCreate ||
       // loadingScreenList ||
-      loadingScreenFew ||
       loadingMyScreens ? (
         <HLoading
           loading={
             loadingUser ||
             loadingCreate ||
             // loadingScreenList ||
-            loadingScreenFew ||
             loadingMyScreens
           }
         />
       ) : errorUser ||
         errorCreate ||
         // errorScreenList ||
-        errorScreenFew ||
         errorMyScreens ? (
         <MessageBox
           message={
             errorUser ||
             errorCreate ||
             // errorScreenList ||
-            errorScreenFew ||
             errorMyScreens
           }
         ></MessageBox>
@@ -211,32 +189,7 @@ export function Screens(props: any) {
             )}
           </Flex>
           <hr />
-          {allScreensVisible && (
-            <Stack p="1">
-              <SimpleGrid p="1" gap="4" columns={[2]}>
-                {screensFew.length === 0 && (
-                  <MessageBox>No Screen Found</MessageBox>
-                )}
-                {screensFew.map((screen: any, index: any) => (
-                  <MotionFlex
-                    flexDir="column"
-                    w="100%"
-                    role="group"
-                    rounded="md"
-                    shadow="card"
-                    whileHover={{
-                      translateY: -3,
-                    }}
-                    pos="relative"
-                    zIndex="1"
-                    key={index}
-                  >
-                    <Screen key={screen._id} screen={screen} />
-                  </MotionFlex>
-                ))}
-              </SimpleGrid>
-            </Stack>
-          )}
+          {allScreensVisible && <Leaderboard props="screen" />}
           {myScreensVisible && (
             <Stack p="1">
               <SimpleGrid p="1" gap="4" columns={[2]}>
