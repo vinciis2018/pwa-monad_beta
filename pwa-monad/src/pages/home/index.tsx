@@ -23,9 +23,6 @@ import {
   AiOutlineArrowLeft,
 } from "react-icons/ai";
 
-// import { TopNftsContent } from "components/widgets";
-// import { TimeFilter } from "components/filters";
-
 import HLoading from "components/atoms/HLoading";
 import MessageBox from "components/atoms/MessageBox";
 import { Leaderboard } from "components/widgets";
@@ -39,7 +36,7 @@ export function Home(props: any) {
   const userSignin = useSelector((state: any) => state.userSignin);
   const { userInfo } = userSignin;
 
-  const screenFew = useSelector((state: any) => state.screenList);
+  const screenFew = useSelector((state: any) => state.screenFew);
   const {
     loading: loadingScreensFew,
     error: errorScreensFew,
@@ -81,9 +78,6 @@ export function Home(props: any) {
             <MessageBox variant="danger">{errorScreensFew}</MessageBox>
           ) : (
             <Center width="100%">
-              {screensFew?.length === 0 && (
-                <MessageBox>No Screen Found</MessageBox>
-              )}
               <Carousel showArrows autoPlay showThumbs={false}>
                 {screensFew?.map((screen: any) => (
                   <Box

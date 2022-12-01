@@ -11,9 +11,9 @@ import {
   AlertDescription,
   // Button,
   Center,
-  Spinner,
 } from "@chakra-ui/react";
 import { RenderScreensList } from "components/widgets";
+import HLoading from "components/atoms/HLoading";
 // import { refreshPage } from "services/utils";
 
 const TopScreensContent = ({ query }: any) => {
@@ -70,17 +70,7 @@ const TopScreensContent = ({ query }: any) => {
   }
   return (
     <>
-      {isLoading && (
-        <Center w="100%" minH={{ base: "300px", md: "600px" }}>
-          <Spinner
-            thickness="3px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="lg"
-          />
-        </Center>
-      )}
+      {isLoading && <HLoading loading={isLoading} />}
       {/* Loading | Nfts */}
       {!isLoading && <RenderScreensList screens={screensView} />}
       {!isLoading && hasMore && <div ref={sentryRef} />}
